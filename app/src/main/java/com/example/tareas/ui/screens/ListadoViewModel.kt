@@ -1,7 +1,10 @@
 package com.example.tareas.ui.screens
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,12 +25,23 @@ class ListadoViewModel: ViewModel() {
         cargarDatos()
     }
 
-    fun cargarDatos(){
-        viewModelScope.launch {
-            _uiState.update { it.copy(cargando = true, mensaje = "Cargando datos") }
-            delay(5.seconds)
-            _uiState.update { it.copy(cargando = false, mensaje = "Datos cargados!") }
-        }
+    var corrutina: Job? = null
 
+    fun cargarDatos(){
+        corrutina = viewModelScope.launch {
+
+            try {
+                _uiState.update { it.copy(cargando = true, mensaje = "Cargando datos") }
+                delay(5.seconds)
+                _uiState.update { it.copy(cargando = false, mensaje = "Datos cargados!") }
+            }
+            catch (e: CancellationException){
+                _uiState.update { it.copy(cargando = false, mensaje = "Cancelado") }
+            }
+        }
+    }
+
+    fun cancelar(){
+        corrutina?.cancel()
     }
 }
