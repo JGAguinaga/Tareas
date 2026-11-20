@@ -71,7 +71,7 @@ fun TareasApp() {
                 )
             }
         ) { innerPadding ->
-            NavHost(navController, startDestination = TareasScreens.Detalle.name) {
+            NavHost(navController, startDestination = TareasScreens.Listado.name) {
                 composable(route = TareasScreens.Listado.name) {
                     ListadoScreen(modifier = Modifier.padding(innerPadding))
                 }
