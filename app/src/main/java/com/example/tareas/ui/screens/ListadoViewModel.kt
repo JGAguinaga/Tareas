@@ -3,6 +3,7 @@ package com.example.tareas.ui.screens
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tareas.data.RetrofitClient
 import com.example.tareas.data.TareaDto
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -33,9 +34,9 @@ class ListadoViewModel: ViewModel() {
         corrutina = viewModelScope.launch {
 
             try {
-                _uiState.update { it.copy(cargando = true, mensaje = "Cargando datos") }
-                delay(5.seconds)
-                _uiState.update { it.copy(cargando = false, mensaje = "Datos cargados!") }
+                _uiState.update { it.copy(cargando = true, mensaje = "Cargando datos", tareas = emptyList()) }
+                val tareasResponse = RetrofitClient.apiService.obtenerTareas()
+                _uiState.update { it.copy(cargando = false, mensaje = "Datos cargados!", tareas = tareasResponse) }
             }
             catch (e: CancellationException){
                 _uiState.update { it.copy(cargando = false, mensaje = "Cancelado") }
