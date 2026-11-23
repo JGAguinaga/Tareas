@@ -3,6 +3,7 @@ package com.example.tareas.ui.screens
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tareas.data.TareaDto
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,7 +15,8 @@ import kotlin.time.Duration.Companion.seconds
 
 data class ListadoUiState(
     val cargando: Boolean = false,
-    val mensaje: String = "Iniciando..."
+    val mensaje: String = "Iniciando...",
+    val tareas: List<TareaDto> = emptyList()
 )
 
 class ListadoViewModel: ViewModel() {
